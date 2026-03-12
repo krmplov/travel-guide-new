@@ -6,8 +6,17 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		361D4F642F6349A30070AEB5 /* Лабораторная 2.md in Resources */ = {isa = PBXBuildFile; fileRef = 361D4F602F6349A30070AEB5 /* Лабораторная 2.md */; };
+		361D4F652F6349A30070AEB5 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 361D4F632F6349A30070AEB5 /* README.md */; };
+		361D4F662F6349A30070AEB5 /* Лабораторная 3.md in Resources */ = {isa = PBXBuildFile; fileRef = 361D4F612F6349A30070AEB5 /* Лабораторная 3.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		361D4F0A2F6349820070AEB5 /* travel-guide-new.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "travel-guide-new.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		361D4F602F6349A30070AEB5 /* Лабораторная 2.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "Лабораторная 2.md"; sourceTree = "<group>"; };
+		361D4F612F6349A30070AEB5 /* Лабораторная 3.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "Лабораторная 3.md"; sourceTree = "<group>"; };
+		361D4F632F6349A30070AEB5 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -47,6 +56,8 @@
 			children = (
 				361D4F0C2F6349820070AEB5 /* travel-guide-new */,
 				361D4F0B2F6349820070AEB5 /* Products */,
+				361D4F622F6349A30070AEB5 /* Docs */,
+				361D4F632F6349A30070AEB5 /* README.md */,
 			);
 			sourceTree = "<group>";
 		};
@@ -56,6 +67,15 @@
 				361D4F0A2F6349820070AEB5 /* travel-guide-new.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		361D4F622F6349A30070AEB5 /* Docs */ = {
+			isa = PBXGroup;
+			children = (
+				361D4F602F6349A30070AEB5 /* Лабораторная 2.md */,
+				361D4F612F6349A30070AEB5 /* Лабораторная 3.md */,
+			);
+			path = Docs;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -122,6 +142,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				361D4F642F6349A30070AEB5 /* Лабораторная 2.md in Resources */,
+				361D4F652F6349A30070AEB5 /* README.md in Resources */,
+				361D4F662F6349A30070AEB5 /* Лабораторная 3.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

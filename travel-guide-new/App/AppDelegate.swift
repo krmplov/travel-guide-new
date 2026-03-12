@@ -1,10 +1,3 @@
-//
-//  AppDelegate.swift
-//  travel-guide-new
-//
-//  Created by Полина on 12.03.2026.
-//
-
 import UIKit
 
 @main
