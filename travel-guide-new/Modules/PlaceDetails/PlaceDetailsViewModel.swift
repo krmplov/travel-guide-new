@@ -1,12 +1,12 @@
 import Foundation
 
 struct PlaceDetailsInput: Equatable {
-    let placeId: UUID
+    let placeId: Int
 }
 
 enum PlaceDetailsOutput: Equatable {
     case didClose
-    case didToggleFavorite(placeId: UUID, isFavorite: Bool)
+    case didToggleFavorite(placeId: Int, isFavorite: Bool)
 }
 
 protocol PlaceDetailsViewModel {

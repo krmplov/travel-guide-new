@@ -12,11 +12,18 @@ final class AuthNavigatorImpl: AuthNavigator {
     }
 
     func openPlacesList() {
-        let viewController = UIViewController()
-        viewController.view.backgroundColor = .systemBackground
-        viewController.title = "Места"
+            guard let navigationController = navigationController else { return }
 
-        navigationController?.setViewControllers([viewController], animated: true)
-    }
+            let repository = PlacesRepositoryImpl()
+            let service = PlacesServiceImpl(repository: repository)
+            let navigator = PlacesListNavigatorImpl(navigationController: navigationController)
+            let viewModel = PlacesListViewModelImpl(
+                placesService: service,
+                navigator: navigator
+            )
+            let viewController = PlacesListViewController(viewModel: viewModel)
+
+            navigationController.setViewControllers([viewController], animated: true)
+        }
 
 }

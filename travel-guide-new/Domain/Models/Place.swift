@@ -1,13 +1,13 @@
 import Foundation
 
 struct Place: Equatable, Identifiable, Codable {
-    let id: UUID
+    let id: Int
     let title: String
     let description: String?
     let imageURL: URL?
 
     init(
-        id: UUID,
+        id: Int,
         title: String,
         description: String? = nil,
         imageURL: URL? = nil

@@ -1,7 +1,7 @@
 import Foundation
 
 struct PlaceDetailsViewData: Equatable {
-    let id: UUID
+    let id: Int
     let title: String
     let description: String?
     let address: String

@@ -1,5 +1,5 @@
 import Foundation
 
 protocol FavoriteService {
-    func toggleFavorite(placeId: UUID) async throws -> FavoriteStatus
+    func toggleFavorite(placeId: Int) async throws -> FavoriteStatus
 }
