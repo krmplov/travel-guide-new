@@ -50,7 +50,7 @@ final class AuthViewController: UIViewController, AuthView {
         setupHierarchy()
         setupConstraints()
     }
-
+    
     private func setupViews() {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         contentView.translatesAutoresizingMaskIntoConstraints = false
