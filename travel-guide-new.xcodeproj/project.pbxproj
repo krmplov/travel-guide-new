@@ -11,6 +11,8 @@
 		361D4F652F6349A30070AEB5 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 361D4F632F6349A30070AEB5 /* README.md */; };
 		361D4F662F6349A30070AEB5 /* Лабораторная 3.md in Resources */ = {isa = PBXBuildFile; fileRef = 361D4F612F6349A30070AEB5 /* Лабораторная 3.md */; };
 		3682495A2F805F76009AFE1F /* Лабораторная 5.md in Resources */ = {isa = PBXBuildFile; fileRef = 368249592F805F76009AFE1F /* Лабораторная 5.md */; };
+		36AB57342F87B18F00BF302F /* Лабораторная 6.md in Resources */ = {isa = PBXBuildFile; fileRef = 36AB57332F87B18F00BF302F /* Лабораторная 6.md */; };
+		36AB57D52F88084F00BF302F /* UI kit foundations_ Hit area and accessibility sizing.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 36AB57D42F88084F00BF302F /* UI kit foundations_ Hit area and accessibility sizing.jpg */; };
 		36ECAEA02F743FA500FE5677 /* Лабораторная 4.md in Resources */ = {isa = PBXBuildFile; fileRef = 36ECAE9F2F743FA500FE5677 /* Лабораторная 4.md */; };
 /* End PBXBuildFile section */
 
@@ -20,6 +22,8 @@
 		361D4F612F6349A30070AEB5 /* Лабораторная 3.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "Лабораторная 3.md"; sourceTree = "<group>"; };
 		361D4F632F6349A30070AEB5 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		368249592F805F76009AFE1F /* Лабораторная 5.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "Лабораторная 5.md"; sourceTree = "<group>"; };
+		36AB57332F87B18F00BF302F /* Лабораторная 6.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "Лабораторная 6.md"; sourceTree = "<group>"; };
+		36AB57D42F88084F00BF302F /* UI kit foundations_ Hit area and accessibility sizing.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "UI kit foundations_ Hit area and accessibility sizing.jpg"; sourceTree = "<group>"; };
 		36ECAE9F2F743FA500FE5677 /* Лабораторная 4.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "Лабораторная 4.md"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -80,6 +84,8 @@
 				361D4F612F6349A30070AEB5 /* Лабораторная 3.md */,
 				36ECAE9F2F743FA500FE5677 /* Лабораторная 4.md */,
 				368249592F805F76009AFE1F /* Лабораторная 5.md */,
+				36AB57332F87B18F00BF302F /* Лабораторная 6.md */,
+				36AB57D42F88084F00BF302F /* UI kit foundations_ Hit area and accessibility sizing.jpg */,
 			);
 			path = Docs;
 			sourceTree = "<group>";
@@ -150,8 +156,10 @@
 			files = (
 				361D4F642F6349A30070AEB5 /* Лабораторная 2.md in Resources */,
 				361D4F652F6349A30070AEB5 /* README.md in Resources */,
+				36AB57D52F88084F00BF302F /* UI kit foundations_ Hit area and accessibility sizing.jpg in Resources */,
 				361D4F662F6349A30070AEB5 /* Лабораторная 3.md in Resources */,
 				3682495A2F805F76009AFE1F /* Лабораторная 5.md in Resources */,
+				36AB57342F87B18F00BF302F /* Лабораторная 6.md in Resources */,
 				36ECAEA02F743FA500FE5677 /* Лабораторная 4.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

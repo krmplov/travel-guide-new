@@ -9,11 +9,25 @@ final class AuthViewController: UIViewController, AuthView {
 
     private let scrollView = UIScrollView()
     private let contentView = UIView()
+    private let contentStackView = UIStackView()
+    private let titleLabel = UILabel()
+    private let subtitleLabel = UILabel()
 
-    private let loginTextField = UITextField()
-    private let passwordTextField = UITextField()
+    private let loginTextField = DSTextField(
+        configuration: .init(
+            title: "Логин",
+            placeholder: "Введите логин"
+        )
+    )
+    private let passwordTextField = DSTextField(
+        configuration: .init(
+            title: "Пароль",
+            placeholder: "Введите пароль",
+            isSecureTextEntry: true
+        )
+    )
     private let errorLabel = UILabel()
-    private let loginButton = UIButton(type: .system)
+    private let loginButton = DSButton(style: .primary)
 
     init(viewModel: AuthViewModel) {
         self.viewModel = viewModel
@@ -44,7 +58,7 @@ final class AuthViewController: UIViewController, AuthView {
     }
 
     private func setupUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = DS.Color.background
 
         setupViews()
         setupHierarchy()
@@ -54,32 +68,34 @@ final class AuthViewController: UIViewController, AuthView {
     private func setupViews() {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         contentView.translatesAutoresizingMaskIntoConstraints = false
+        contentStackView.translatesAutoresizingMaskIntoConstraints = false
+        contentStackView.axis = .vertical
+        contentStackView.spacing = DS.Space.space200
 
-        loginTextField.placeholder = "Логин"
-        loginTextField.borderStyle = .roundedRect
-        loginTextField.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.apply(.headingXL)
+        titleLabel.text = "Вход"
+        titleLabel.numberOfLines = 0
 
-        passwordTextField.placeholder = "Пароль"
-        passwordTextField.borderStyle = .roundedRect
-        passwordTextField.isSecureTextEntry = true
-        passwordTextField.translatesAutoresizingMaskIntoConstraints = false
+        subtitleLabel.apply(.body)
+        subtitleLabel.text = "Войдите, чтобы посмотреть список мест"
+        subtitleLabel.textColor = DS.Color.textSubtle
+        subtitleLabel.numberOfLines = 0
 
-        errorLabel.textColor = .red
+        errorLabel.apply(.error)
         errorLabel.numberOfLines = 0
         errorLabel.isHidden = true
-        errorLabel.translatesAutoresizingMaskIntoConstraints = false
 
         loginButton.setTitle("Войти", for: .normal)
         loginButton.addTarget(self, action: #selector(didTapLogin), for: .touchUpInside)
-        loginButton.translatesAutoresizingMaskIntoConstraints = false
     }
 
     private func setupHierarchy() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
+        contentView.addSubview(contentStackView)
 
-        [loginTextField, passwordTextField, errorLabel, loginButton].forEach {
-            contentView.addSubview($0)
+        [titleLabel, subtitleLabel, loginTextField, passwordTextField, errorLabel, loginButton].forEach {
+            contentStackView.addArrangedSubview($0)
         }
     }
 
@@ -97,22 +113,10 @@ final class AuthViewController: UIViewController, AuthView {
 
             contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor),
 
-            loginTextField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 100),
-            loginTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            loginTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-
-            passwordTextField.topAnchor.constraint(equalTo: loginTextField.bottomAnchor, constant: 12),
-            passwordTextField.leadingAnchor.constraint(equalTo: loginTextField.leadingAnchor),
-            passwordTextField.trailingAnchor.constraint(equalTo: loginTextField.trailingAnchor),
-
-            errorLabel.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 12),
-            errorLabel.leadingAnchor.constraint(equalTo: loginTextField.leadingAnchor),
-            errorLabel.trailingAnchor.constraint(equalTo: loginTextField.trailingAnchor),
-
-            loginButton.topAnchor.constraint(equalTo: errorLabel.bottomAnchor, constant: 20),
-            loginButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-
-            loginButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+            contentStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: DS.Space.space400 * 2),
+            contentStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: DS.Space.space300),
+            contentStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -DS.Space.space300),
+            contentStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -DS.Space.space300)
         ])
     }
 
@@ -142,25 +146,34 @@ final class AuthViewController: UIViewController, AuthView {
     @objc
     private func didTapLogin() {
         viewModel.didTapLogin(
-            login: loginTextField.text ?? "",
-            password: passwordTextField.text ?? ""
+            login: loginTextField.text,
+            password: passwordTextField.text
         )
     }
 
     func update(_ state: AuthViewState) {
         switch state {
         case .form:
-            loginButton.isEnabled = true
+            setFormEnabled(true)
+            loginButton.setTitle("Войти", for: .normal)
             errorLabel.isHidden = true
 
         case .loading:
-            loginButton.isEnabled = false
+            setFormEnabled(false)
+            loginButton.setTitle("Входим...", for: .normal)
             errorLabel.isHidden = true
 
         case .error(let message):
-            loginButton.isEnabled = true
+            setFormEnabled(true)
+            loginButton.setTitle("Войти", for: .normal)
             errorLabel.text = message
             errorLabel.isHidden = false
         }
+    }
+
+    private func setFormEnabled(_ isEnabled: Bool) {
+        loginTextField.setEnabled(isEnabled)
+        passwordTextField.setEnabled(isEnabled)
+        loginButton.isEnabled = isEnabled
     }
 }
