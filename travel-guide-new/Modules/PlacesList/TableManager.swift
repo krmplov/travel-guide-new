@@ -50,7 +50,7 @@ final class PlaceTableViewCell: UITableViewCell {
 
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .headline)
+        label.apply(.bodyStrong)
         label.numberOfLines = 2
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -58,8 +58,8 @@ final class PlaceTableViewCell: UITableViewCell {
 
     private let subtitleLabel: UILabel = {
         let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .subheadline)
-        label.textColor = .secondaryLabel
+        label.apply(.bodySmall)
+        label.textColor = DS.Color.textSubtle
         label.numberOfLines = 3
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -68,7 +68,7 @@ final class PlaceTableViewCell: UITableViewCell {
     private let textStack: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
-        stackView.spacing = 6
+        stackView.spacing = DS.Space.space050
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
@@ -102,6 +102,8 @@ final class PlaceTableViewCell: UITableViewCell {
     }
 
     private func setupUI() {
+        backgroundColor = DS.Color.background
+        contentView.backgroundColor = DS.Color.background
         accessoryType = .disclosureIndicator
         selectionStyle = .default
 
@@ -110,10 +112,10 @@ final class PlaceTableViewCell: UITableViewCell {
         textStack.addArrangedSubview(subtitleLabel)
 
         NSLayoutConstraint.activate([
-            textStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
-            textStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            textStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            textStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12)
+            textStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: DS.Space.space150),
+            textStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: DS.Space.space200),
+            textStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -DS.Space.space200),
+            textStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -DS.Space.space150)
         ])
     }
 }

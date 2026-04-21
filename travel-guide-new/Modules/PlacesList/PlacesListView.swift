@@ -8,6 +8,15 @@ final class PlacesListViewController: UIViewController, PlacesListView {
         let searchBar = UISearchBar()
         searchBar.placeholder = "Поиск мест"
         searchBar.autocapitalizationType = .none
+        searchBar.searchBarStyle = .minimal
+        searchBar.tintColor = DS.Color.brand
+        searchBar.searchTextField.font = DS.Typography.body
+        searchBar.searchTextField.textColor = DS.Color.text
+        searchBar.searchTextField.backgroundColor = DS.Color.surface
+        searchBar.searchTextField.layer.cornerRadius = DS.Radius.medium
+        searchBar.searchTextField.layer.borderWidth = DS.BorderWidth.standard
+        searchBar.searchTextField.layer.borderColor = DS.Color.border.cgColor
+        searchBar.searchTextField.clipsToBounds = true
         searchBar.delegate = self
         searchBar.sizeToFit()
         return searchBar
@@ -24,6 +33,8 @@ final class PlacesListViewController: UIViewController, PlacesListView {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 88
+        tableView.backgroundColor = DS.Color.background
+        tableView.separatorColor = DS.Color.border
         tableView.tableFooterView = UIView()
         tableView.isHidden = true
         tableView.dataSource = listManager
@@ -37,43 +48,13 @@ final class PlacesListViewController: UIViewController, PlacesListView {
         return tableView
     }()
 
-    private lazy var stateContainerView: UIView = {
-        let view = UIView()
+    private lazy var stateView: DSState = {
+        let view = DSState()
+        view.onRetry = { [weak self] in
+            self?.viewModel.didLoad()
+        }
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
-    }()
-
-    private lazy var activityIndicator: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(style: .large)
-        indicator.translatesAutoresizingMaskIntoConstraints = false
-        indicator.hidesWhenStopped = true
-        return indicator
-    }()
-
-    private lazy var statusLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.numberOfLines = 0
-        label.textAlignment = .center
-        label.isHidden = true
-        return label
-    }()
-
-    private lazy var retryButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Повторить", for: .normal)
-        button.isHidden = true
-        button.addTarget(self, action: #selector(didTapRetry), for: .touchUpInside)
-        return button
-    }()
-
-    private lazy var tableBackgroundLabel: UILabel = {
-        let label = UILabel()
-        label.textAlignment = .center
-        label.textColor = .secondaryLabel
-        label.numberOfLines = 0
-        return label
     }()
 
     init(viewModel: PlacesListViewModel) {
@@ -88,7 +69,7 @@ final class PlacesListViewController: UIViewController, PlacesListView {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = DS.Color.background
         title = "Места"
 
         setupUI()
@@ -105,10 +86,7 @@ final class PlacesListViewController: UIViewController, PlacesListView {
 
     private func setupUI() {
         view.addSubview(tableView)
-        view.addSubview(stateContainerView)
-        stateContainerView.addSubview(activityIndicator)
-        stateContainerView.addSubview(statusLabel)
-        stateContainerView.addSubview(retryButton)
+        view.addSubview(stateView)
 
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -116,20 +94,10 @@ final class PlacesListViewController: UIViewController, PlacesListView {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 
-            stateContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            stateContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            stateContainerView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-
-            activityIndicator.topAnchor.constraint(equalTo: stateContainerView.topAnchor),
-            activityIndicator.centerXAnchor.constraint(equalTo: stateContainerView.centerXAnchor),
-
-            statusLabel.topAnchor.constraint(equalTo: activityIndicator.bottomAnchor, constant: 16),
-            statusLabel.leadingAnchor.constraint(equalTo: stateContainerView.leadingAnchor),
-            statusLabel.trailingAnchor.constraint(equalTo: stateContainerView.trailingAnchor),
-
-            retryButton.topAnchor.constraint(equalTo: statusLabel.bottomAnchor, constant: 16),
-            retryButton.centerXAnchor.constraint(equalTo: stateContainerView.centerXAnchor),
-            retryButton.bottomAnchor.constraint(equalTo: stateContainerView.bottomAnchor)
+            stateView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            stateView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            stateView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            stateView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
 
@@ -138,17 +106,10 @@ final class PlacesListViewController: UIViewController, PlacesListView {
         case .loading(let isRefreshing):
             if isRefreshing {
                 tableView.isHidden = false
-                stateContainerView.isHidden = true
-                activityIndicator.stopAnimating()
-                statusLabel.isHidden = true
-                retryButton.isHidden = true
+                stateView.render(.hidden)
             } else {
                 tableView.isHidden = true
-                stateContainerView.isHidden = false
-                activityIndicator.startAnimating()
-                statusLabel.isHidden = false
-                statusLabel.text = "Загрузка мест..."
-                retryButton.isHidden = true
+                stateView.render(.loading(text: "Загрузка мест..."))
             }
 
         case .content(let items):
@@ -157,48 +118,32 @@ final class PlacesListViewController: UIViewController, PlacesListView {
 
             endRefreshingIfNeeded()
             tableView.backgroundView = nil
-            activityIndicator.stopAnimating()
-            stateContainerView.isHidden = true
-            statusLabel.isHidden = true
-            retryButton.isHidden = true
+            stateView.render(.hidden)
             tableView.isHidden = false
 
         case .empty(let message, let showsInlineInList):
             endRefreshingIfNeeded()
-            activityIndicator.stopAnimating()
-            retryButton.isHidden = true
 
             if showsInlineInList {
                 listManager.setItems([])
                 tableView.reloadData()
-                tableBackgroundLabel.text = message
-                tableView.backgroundView = tableBackgroundLabel
+                let emptyView = DSEmpty()
+                emptyView.configure(text: message)
+                tableView.backgroundView = emptyView
                 tableView.isHidden = false
-                stateContainerView.isHidden = true
-                statusLabel.isHidden = true
+                stateView.render(.hidden)
             } else {
                 tableView.backgroundView = nil
                 tableView.isHidden = true
-                stateContainerView.isHidden = false
-                statusLabel.isHidden = false
-                statusLabel.text = message
+                stateView.render(.empty(text: message))
             }
 
         case .error(let message):
             endRefreshingIfNeeded()
             tableView.backgroundView = nil
             tableView.isHidden = true
-            stateContainerView.isHidden = false
-            activityIndicator.stopAnimating()
-            statusLabel.isHidden = false
-            statusLabel.text = "Ошибка:\n\(message)"
-            retryButton.isHidden = false
+            stateView.render(.error(message: "Ошибка:\n\(message)", retryTitle: "Повторить"))
         }
-    }
-
-    @objc
-    private func didTapRetry() {
-        viewModel.didLoad()
     }
 
     @objc

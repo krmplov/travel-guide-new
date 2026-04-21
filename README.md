@@ -111,3 +111,24 @@ MVVM выбран для этого проекта, потому что прил
 
 - `D1`: реализован `pull-to-refresh` через `UIRefreshControl`
 - `D2`: реализован поиск по списку через `UISearchBar`
+
+## Лабораторная 6
+
+дизайн система применена на экранах авторизации и списка мест
+
+- `DSButton`
+- `DSTextField`
+- `DSLoading`
+- `DSError`
+- `DSEmpty`
+- `DSState`
+
+- `DSColors`
+- `DSRadius`
+- `DSSpasing`
+- `DSTypography`
+
+### Дополнительные задания
+
+- `D3`: реализованы стили текста `TextStyle`
+- `D4`: реализованы компоненты форм
