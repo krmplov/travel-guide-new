@@ -13,6 +13,8 @@ protocol PlacesListViewModel {
     var onOutput: ((PlacesListOutput) -> Void)? { get set }
 
     func didLoad()
+    func didPullToRefresh()
+    func didChangeSearchQuery(_ query: String)
     func didSelectPlace(id: Int)
 }
 
@@ -22,6 +24,8 @@ final class PlacesListViewModelImpl: PlacesListViewModel {
 
     private let placesService: PlacesService
     private let navigator: PlacesListNavigator
+    private var allItems: [PlaceCellViewModel] = []
+    private var currentSearchQuery = ""
 
     init(
         placesService: PlacesService,
@@ -32,7 +36,25 @@ final class PlacesListViewModelImpl: PlacesListViewModel {
     }
 
     func didLoad() {
-        onStateChange?(.loading)
+        loadPlaces(isRefreshing: false)
+    }
+
+    func didPullToRefresh() {
+        loadPlaces(isRefreshing: true)
+    }
+
+    func didChangeSearchQuery(_ query: String) {
+        currentSearchQuery = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        publishFilteredItems()
+    }
+
+    func didSelectPlace(id: Int) {
+        onOutput?(.didSelectPlace(placeId: id))
+        navigator.openPlaceDetails(placeId: id)
+    }
+
+    private func loadPlaces(isRefreshing: Bool) {
+        onStateChange?(.loading(isRefreshing: isRefreshing))
 
         Task {
             do {
@@ -48,11 +70,8 @@ final class PlacesListViewModelImpl: PlacesListViewModel {
                 }
 
                 await MainActor.run {
-                    if items.isEmpty {
-                        self.onStateChange?(.empty)
-                    } else {
-                        self.onStateChange?(.content(items: items))
-                    }
+                    self.allItems = items
+                    self.publishFilteredItems()
                 }
             } catch let error as DomainError {
                 await MainActor.run {
@@ -77,8 +96,26 @@ final class PlacesListViewModelImpl: PlacesListViewModel {
         }
     }
 
-    func didSelectPlace(id: Int) {
-        onOutput?(.didSelectPlace(placeId: id))
-        navigator.openPlaceDetails(placeId: id)
+    private func publishFilteredItems() {
+        let items: [PlaceCellViewModel]
+
+        if currentSearchQuery.isEmpty {
+            items = allItems
+        } else {
+            let normalizedQuery = currentSearchQuery.localizedLowercase
+
+            items = allItems.filter { item in
+                item.title.localizedLowercase.contains(normalizedQuery)
+                || (item.subtitle?.localizedLowercase.contains(normalizedQuery) ?? false)
+            }
+        }
+
+        if items.isEmpty {
+            let isSearchActive = currentSearchQuery.isEmpty == false
+            let message = isSearchActive ? "Ничего не найдено" : "Список пуст"
+            onStateChange?(.empty(message: message, showsInlineInList: isSearchActive))
+        } else {
+            onStateChange?(.content(items: items))
+        }
     }
 }

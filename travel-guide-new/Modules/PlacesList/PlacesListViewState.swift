@@ -1,8 +1,8 @@
 import Foundation
 
 enum PlacesListViewState: Equatable {
-    case loading
+    case loading(isRefreshing: Bool)
     case content(items: [PlaceCellViewModel])
-    case empty
+    case empty(message: String, showsInlineInList: Bool)
     case error(message: String)
 }

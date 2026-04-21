@@ -6,7 +6,7 @@ enum PlacesAPI {
         components?.queryItems = [
             URLQueryItem(name: "lang", value: "ru"),
             URLQueryItem(name: "location", value: "msk"),
-            URLQueryItem(name: "page_size", value: "50"),
+            URLQueryItem(name: "page_size", value: "100"),
             URLQueryItem(name: "fields", value: "id,title,address,description,images")
         ]
         return components?.url

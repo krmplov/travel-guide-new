@@ -12,5 +12,10 @@ final class PlacesListNavigatorImpl: PlacesListNavigator {
     }
 
     func openPlaceDetails(placeId: Int) {
+        guard let navigationController else { return }
+
+        let viewController = PlaceDetailsViewController(placeId: placeId)
+
+        navigationController.pushViewController(viewController, animated: true)
     }
 }
